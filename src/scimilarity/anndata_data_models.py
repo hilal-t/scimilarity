@@ -25,7 +25,8 @@ class scDataset(Dataset):
 
     def __getitem__(self, idx):
         # data, label, study
-        return self.X[idx].A, self.Y[idx], self.study[idx]
+        # return self.X[idx].A, self.Y[idx], self.study[idx]
+        return self.X[idx].toarray(), self.Y[idx], self.study[idx]
 
 
 class MetricLearningDataModule(pl.LightningDataModule):
@@ -219,7 +220,7 @@ class MetricLearningDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             pin_memory=True,
             drop_last=True,
-            sampler=self.get_sampler_weights(self.train_dataset),
+            sampler=self.get_sampler_weights(self.train_dataset.Y),
             collate_fn=self.collate,
         )
 
@@ -240,7 +241,7 @@ class MetricLearningDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             pin_memory=True,
             drop_last=True,
-            sampler=self.get_sampler_weights(self.val_dataset),
+            sampler=self.get_sampler_weights(self.val_dataset.Y),
             collate_fn=self.collate,
         )
 
